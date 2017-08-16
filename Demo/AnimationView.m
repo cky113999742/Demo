@@ -68,8 +68,8 @@
     preAnimation.delegate = self;
     preAnimation.removedOnCompletion = NO;
     preAnimation.fillMode = kCAFillModeForwards;
-    preAnimation.values = @[@(0), @(-moveDistence-6), @(-moveDistence+3), @(-moveDistence-1), @(-moveDistence)];
-    preAnimation.keyTimes = @[@(0), @(0.4), @(0.6), @(0.8), @(1)];
+    preAnimation.values = @[@(0), @(-moveDistence-4), @(-moveDistence+2), @(-moveDistence)];
+    preAnimation.keyTimes = @[@(0), @(0.4), @(0.8), @(1)];
     preAnimation.duration = 0.625;
     [self.preImageView.layer addAnimation:preAnimation forKey:@"pre"];
 }
