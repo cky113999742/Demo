@@ -61,15 +61,16 @@
     currentAnimation.removedOnCompletion = NO;
     currentAnimation.fillMode = kCAFillModeForwards;
     currentAnimation.values = @[@(0), @(-moveDistence)];
-    currentAnimation.duration = 0.2;
+    currentAnimation.duration = 0.25;
     [self.currentImageView.layer addAnimation:currentAnimation forKey:@"current"];
     
     CAKeyframeAnimation *preAnimation = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.x"];
     preAnimation.delegate = self;
     preAnimation.removedOnCompletion = NO;
     preAnimation.fillMode = kCAFillModeForwards;
-    preAnimation.values = @[@(0), @(-moveDistence-8), @(-moveDistence+5), @(-moveDistence-3), @(-moveDistence)];
-    preAnimation.duration = 0.3;
+    preAnimation.values = @[@(0), @(-moveDistence-6), @(-moveDistence+3), @(-moveDistence-1), @(-moveDistence)];
+    preAnimation.keyTimes = @[@(0), @(0.4), @(0.6), @(0.8), @(1)];
+    preAnimation.duration = 0.625;
     [self.preImageView.layer addAnimation:preAnimation forKey:@"pre"];
 }
 
