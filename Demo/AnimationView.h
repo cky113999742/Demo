@@ -12,4 +12,6 @@
 
 - (void)updateImageData:(NSArray *)imageArray;
 
+- (void)updateImageColor:(UIColor *)color width:(CGFloat)width;
+
 @end

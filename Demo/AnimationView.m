@@ -12,11 +12,14 @@
 
 @property (nonatomic, strong) UIImageView *preImageView;
 @property (nonatomic, strong) UIImageView *currentImageView;
+@property (nonatomic, strong) UIView *preView;
+@property (nonatomic, strong) UIView *curView;
 @property (nonatomic, strong) NSArray *imageArray;
 @property (nonatomic, assign) CGRect currentNormalRect;
 @property (nonatomic, assign) CGRect preNormalRect;
 @property (nonatomic, assign) NSInteger index;
 @property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, assign) CGFloat borderWidth;
 
 @end
 
@@ -45,6 +48,43 @@
     [self updateCurrentImageView];
     [self updatePreImageView];
     [self beginAnimation];
+}
+
+- (void)updateImageColor:(UIColor *)color width:(CGFloat)width
+{
+    _borderWidth = width;
+    CAShapeLayer *curLayer = [self shapeLayourWithColor:color width:width imageView:self.currentImageView];
+    CAShapeLayer *preLayer = [self shapeLayourWithColor:color width:width imageView:self.preImageView];
+    [_currentImageView.layer addSublayer:curLayer];
+    [_preImageView.layer addSublayer:preLayer];
+    CGRect frame = self.bounds;
+    frame.size.height = _currentNormalRect.size.height+2*width;
+    self.bounds = frame;
+    frame = self.currentImageView.frame;
+    frame.origin.y = width;
+    self.currentImageView.frame = frame;
+    frame = self.preImageView.frame;
+    frame.origin.y = width;
+    self.preImageView.frame = frame;
+//    self.preView.frame = CGRectMake(<#CGFloat x#>, <#CGFloat y#>, <#CGFloat width#>, <#CGFloat height#>)
+    self.preView.backgroundColor = color;
+    self.preView.layer.masksToBounds = YES;
+//    self.preView.layer.cornerRadius =
+}
+
+- (CAShapeLayer *)shapeLayourWithColor:(UIColor *)color width:(CGFloat)width imageView:(UIImageView *)imageView
+{
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    shapeLayer.strokeColor = color.CGColor;
+    shapeLayer.fillColor = [UIColor clearColor].CGColor;
+    shapeLayer.lineWidth = width;
+    shapeLayer.lineJoin = kCALineJoinRound;
+    shapeLayer.lineCap = kCALineCapRound;
+    
+    CGRect rect = CGRectMake(-width, -width, imageView.bounds.size.width+2*width, imageView.bounds.size.height+2*width);
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:rect.size.width*0.5];
+    shapeLayer.path = path.CGPath;
+    return shapeLayer;
 }
 
 - (void)beginAnimation
@@ -106,8 +146,8 @@
     UIImageView *tempImageView = _preImageView;
     _preImageView = _currentImageView;
     _currentImageView = tempImageView;
-    _preImageView.frame = _preNormalRect;
-    _currentImageView.frame = _currentNormalRect;
+    _preImageView.frame = CGRectMake(_preNormalRect.origin.x, _preNormalRect.origin.y+_borderWidth, _preNormalRect.size.width, _preNormalRect.size.height);//_preNormalRect;
+    _currentImageView.frame = CGRectMake(_currentNormalRect.origin.x, _currentNormalRect.origin.y+_borderWidth, _currentNormalRect.size.width, _currentNormalRect.size.height);//_currentNormalRect;
     
     [self updatePreImageView];
 }
@@ -135,6 +175,24 @@
         [self addSubview:_preImageView];
     }
     return _preImageView;
+}
+
+- (UIView *)preView
+{
+    if (!_preView) {
+        _preView = [[UIView alloc] init];
+        [self addSubview:_preView];
+    }
+    return _preView;
+}
+
+- (UIView *)curView
+{
+    if (!_curView) {
+        _curView = [[UIView alloc] init];
+        [self addSubview:_curView];
+    }
+    return _curView;
 }
 
 @end

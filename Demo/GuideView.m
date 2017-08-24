@@ -69,6 +69,7 @@ static CGFloat const triangleW = 35;
             _animationView = [[AnimationView alloc] initWithFrame:CGRectMake(animationX, animationY, animationW, animationH)];
             [self addSubview:_animationView];
         }
+        [self.animationView updateImageColor:[UIColor redColor] width:2];
         [self.animationView updateImageData:_imageArray];
         // 文字
         CGFloat labelX = CGRectGetMaxX(self.animationView.frame)+animationX;
